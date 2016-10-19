@@ -1,0 +1,2 @@
+#parameters:
+#    cache_provider:                     "@cache.provider.redis_crontab"

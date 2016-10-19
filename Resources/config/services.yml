@@ -1,0 +1,5 @@
+services:
+    stp_crontab.manager.job:
+        arguments:
+            -                           "@cache.provider.redis_crontab"
+        class:                          Crontab\Manager\JobManager

@@ -1,0 +1,32 @@
+{
+    "name": "schibsted-tech-polska/crontab-bundle",
+    "description": "Crontab Bundle",
+    "keywords": [
+        "crontab",
+        "bundle"
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Stp\\CrontabBundle\\": ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Stp\\CrontabBundle\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^5.5 || >=7.0",
+
+        "cache/predis-adapter": "^0.4",
+        "schibsted-tech-polska/crontab": "dev-master",
+        "symfony/config": "^2.8 || ^3.0",
+        "symfony/console": "^2.8 || ^3.0",
+        "symfony/dependency-injection": "^2.8 || ^3.0",
+        "symfony/http-kernel": "^2.8 || ^3.0",
+        "symfony/process": "^2.8 || ^3.0",
+
+        "cache/adapter-bundle": "^0.4"
+    }
+}
