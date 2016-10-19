@@ -4,7 +4,6 @@ namespace Stp\CrontabBundle\Command;
 
 use Crontab\Manager\JobManagerInterface;
 use Crontab\Model\Job;
-use Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -37,6 +36,7 @@ class JobExportCommand extends BaseCommand
     {
         $dateFormat = 'Y-m-d H:i:s';
         $headers = [
+            '#',
             'Id',
             'Expression',
             'Command',
@@ -56,14 +56,33 @@ class JobExportCommand extends BaseCommand
             $jobManager = $this->container->get('stp_crontab.manager.job');
 
             $jobs = $jobManager->getJobs();
-            foreach ($jobs as $job) {
+            foreach ($jobs as $number => $job) {
+                if ($job->getActive() == true) {
+                    $activePrefix = '<info>';
+                    $activeSuffix = '</info>';
+                } else {
+                    $activePrefix = '<comment>';
+                    $activeSuffix = '</comment>';
+                }
+                if ($job->getStatus() == Job::STATUS_IN_PROGRESS) {
+                    $statusPrefix = '<comment>';
+                    $statusSuffix = '</comment>';
+                } elseif ($job->getStatus() == Job::STATUS_DONE) {
+                    $statusPrefix = '<info>';
+                    $statusSuffix = '</info>';
+                } else {
+                    $statusPrefix = '<question>';
+                    $statusSuffix = '</question>';
+                }
+
                 $rows[] = [
+                    $number + 1,
                     $job->getId(),
                     $job->getExpression(),
                     $job->getCommand(),
                     Job::TYPES[$job->getType()],
-                    ($job->getActive() ? 'yes' : 'no'),
-                    Job::STATUSES[$job->getStatus()],
+                    $activePrefix . ($job->getActive() ? 'yes' : 'no') . $activeSuffix,
+                    $statusPrefix . Job::STATUSES[$job->getStatus()] . $statusSuffix,
                     ($job->getStartedAt() !== null ? $job->getStartedAt()
                         ->format($dateFormat) : '-'),
                     ($job->getEndedAt() !== null ? $job->getEndedAt()
