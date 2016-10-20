@@ -168,44 +168,6 @@ class WorkerCommand extends BaseCommand
     }
 
     /**
-     * Finish old processes
-     *
-     * @param bool $forceFinish force finish
-     */
-    protected function finishOldProcesses($forceFinish = false)
-    {
-        /** @var JobManagerInterface $jobManager */
-        $jobManager = $this->container->get('stp_crontab.manager.job');
-
-        foreach ($this->processes as $processesPid => $array) {
-            /** @var Process $process */
-            $process = $array[$this->processKey];
-            /** @var Job $job */
-            $job = $array[$this->jobKey];
-
-            if ($forceFinish || $process->isTerminated()) {
-                $job->setEndedAt(new DateTime());
-                $jobManager->setJob($job->getId(), $job);
-
-                unset($this->processes[$processesPid]);
-            }
-        }
-    }
-
-    /**
-     * Write processes output
-     */
-    protected function writeProcessesOutput()
-    {
-        foreach ($this->processes as $processesPid => $array) {
-            /** @var Process $process */
-            $process = $array[$this->processKey];
-
-            $this->io->write($process->getOutput());
-        }
-    }
-
-    /**
      * Get executable command
      *
      * @param string $command command
@@ -280,5 +242,43 @@ class WorkerCommand extends BaseCommand
         }
 
         return $nextIteration;
+    }
+
+    /**
+     * Write processes output
+     */
+    protected function writeProcessesOutput()
+    {
+        foreach ($this->processes as $processesPid => $array) {
+            /** @var Process $process */
+            $process = $array[$this->processKey];
+
+            $this->io->write($process->getOutput());
+        }
+    }
+
+    /**
+     * Finish old processes
+     *
+     * @param bool $forceFinish force finish
+     */
+    protected function finishOldProcesses($forceFinish = false)
+    {
+        /** @var JobManagerInterface $jobManager */
+        $jobManager = $this->container->get('stp_crontab.manager.job');
+
+        foreach ($this->processes as $processesPid => $array) {
+            /** @var Process $process */
+            $process = $array[$this->processKey];
+            /** @var Job $job */
+            $job = $array[$this->jobKey];
+
+            if ($forceFinish || $process->isTerminated()) {
+                $job->setEndedAt(new DateTime());
+                $jobManager->setJob($job->getId(), $job);
+
+                unset($this->processes[$processesPid]);
+            }
+        }
     }
 }
