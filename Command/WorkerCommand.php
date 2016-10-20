@@ -232,6 +232,9 @@ class WorkerCommand extends BaseCommand
 
         $delay = $this->container->getParameter('stp_crontab.worker_delay');
         $sec = floor(($sec + $delay) / $delay) * $delay;
+        // $nextIteration is rounded to DateTime value, like this:
+        // if $delay = 60 /default value/ than it's rounded to begin of next minute,
+        // no matter it was only 1 or 59 seconds to the begin
         $nextIteration = new DateTime(sprintf('%u-%u-%u %u:%u:%u', $year, $month, $day, $hour, $min, $sec));
 
         while (new DateTime() < $nextIteration) {
