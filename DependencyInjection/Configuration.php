@@ -30,6 +30,10 @@ class Configuration implements ConfigurationInterface
             ->integerNode('worker_delay')
                 ->defaultValue(60)
             ->end()
+            // worker sleep - lower value saves your CPU load, higher value gives you more frequent output from processes
+            ->integerNode('worker_sleep')
+                ->defaultValue(5)
+            ->end()
         ->end()
         ;
 

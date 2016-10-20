@@ -123,6 +123,9 @@ class WorkerCommand extends BaseCommand
             while (true) {
                 $this->runNewProcesses();
                 $lastIteration = $this->waitForNextIteration($lastIteration);
+
+                $this->writeProcessesOutput();
+                $this->finishOldProcesses();
             }
 
             $res = 1;
@@ -223,6 +226,9 @@ class WorkerCommand extends BaseCommand
      */
     protected function waitForNextIteration(DateTime $lastIteration)
     {
+        $delay = $this->container->getParameter('stp_crontab.worker_delay');
+        $sleep = $this->container->getParameter('stp_crontab.worker_sleep');
+
         $year = $lastIteration->format('Y');
         $month = $lastIteration->format('m');
         $day = $lastIteration->format('d');
@@ -230,7 +236,6 @@ class WorkerCommand extends BaseCommand
         $min = $lastIteration->format('i');
         $sec = $lastIteration->format('s');
 
-        $delay = $this->container->getParameter('stp_crontab.worker_delay');
         $sec = floor(($sec + $delay) / $delay) * $delay;
         // $nextIteration is rounded to DateTime value, like this:
         // if $delay = 60 /default value/ than it's rounded to begin of next minute,
@@ -238,10 +243,10 @@ class WorkerCommand extends BaseCommand
         $nextIteration = new DateTime(sprintf('%u-%u-%u %u:%u:%u', $year, $month, $day, $hour, $min, $sec));
 
         while (new DateTime() < $nextIteration) {
+            sleep($sleep);
+
             $this->writeProcessesOutput();
             $this->finishOldProcesses();
-
-            sleep(1);
         }
 
         return $nextIteration;
