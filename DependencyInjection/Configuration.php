@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('stp_crontab');
 
         $rootNode->children()
-            // processes limit for the same command line /the same type/
+            // limit of processes with the same command line /the same type/
             ->integerNode('processes_limit')
                 ->defaultValue(1)
             ->end()

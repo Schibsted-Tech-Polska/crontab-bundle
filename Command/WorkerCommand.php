@@ -121,19 +121,7 @@ class WorkerCommand extends BaseCommand
             $this->registerShutdownHandlers();
 
             while (true) {
-                // 1) write, what was previously sent to buffers
-                $this->writeProcessesOutput();
-
-                // 2) finish previously terminated processes
-                $this->finishOldProcesses();
-
-                // 3) run new processes
                 $this->runNewProcesses();
-
-                // 4) write, what was just sent to buffers
-                $this->writeProcessesOutput();
-
-                // 5) wait for next iteration
                 $lastIteration = $this->waitForNextIteration($lastIteration);
             }
 
@@ -285,6 +273,9 @@ class WorkerCommand extends BaseCommand
         $nextIteration = new DateTime(sprintf('%u-%u-%u %u:%u:%u', $year, $month, $day, $hour, $min, $sec));
 
         while (new DateTime() < $nextIteration) {
+            $this->writeProcessesOutput();
+            $this->finishOldProcesses();
+
             sleep(1);
         }
 
