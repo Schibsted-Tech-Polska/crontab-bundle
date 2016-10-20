@@ -20,7 +20,7 @@
         "php": "^5.5 || >=7.0",
 
         "cache/predis-adapter": "^0.4",
-        "schibsted-tech-polska/crontab": "dev-master",
+        "schibsted-tech-polska/crontab": "^1.0",
         "symfony/config": "^2.8 || ^3.0",
         "symfony/console": "^2.8 || ^3.0",
         "symfony/dependency-injection": "^2.8 || ^3.0",
