@@ -157,12 +157,12 @@ class WorkerCommand extends BaseCommand
                 $job->setStartedAt(new DateTime());
                 $jobManager->setJob($job->getId(), $job);
 
-                $processPid = $process->getPid();
+                $processId = $process->getPid();
                 $array = [
                     $this->processKey => $process,
                     $this->jobKey => $job,
                 ];
-                $this->processes[$processPid] = $array;
+                $this->processes[$processId] = $array;
             }
         }
     }
@@ -202,7 +202,7 @@ class WorkerCommand extends BaseCommand
             return true;
         }
 
-        foreach ($this->processes as $processesPid => $array) {
+        foreach ($this->processes as $processId => $array) {
             /** @var Process $process */
             $process = $array[$this->processKey];
 
@@ -249,7 +249,7 @@ class WorkerCommand extends BaseCommand
      */
     protected function writeProcessesOutput()
     {
-        foreach ($this->processes as $processesPid => $array) {
+        foreach ($this->processes as $processId => $array) {
             /** @var Process $process */
             $process = $array[$this->processKey];
 
@@ -267,7 +267,7 @@ class WorkerCommand extends BaseCommand
         /** @var JobManagerInterface $jobManager */
         $jobManager = $this->container->get('stp_crontab.manager.job');
 
-        foreach ($this->processes as $processesPid => $array) {
+        foreach ($this->processes as $processId => $array) {
             /** @var Process $process */
             $process = $array[$this->processKey];
             /** @var Job $job */
@@ -277,7 +277,7 @@ class WorkerCommand extends BaseCommand
                 $job->setEndedAt(new DateTime());
                 $jobManager->setJob($job->getId(), $job);
 
-                unset($this->processes[$processesPid]);
+                unset($this->processes[$processId]);
             }
         }
     }
