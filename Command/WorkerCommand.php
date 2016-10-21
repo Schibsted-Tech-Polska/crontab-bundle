@@ -226,8 +226,8 @@ class WorkerCommand extends BaseCommand
      */
     protected function waitForNextIteration(DateTime $lastIteration)
     {
-        $delay = $this->container->getParameter('stp_crontab.worker_delay');
         $sleep = $this->container->getParameter('stp_crontab.worker_sleep');
+        $step = $this->container->getParameter('stp_crontab.worker_step');
 
         $year = $lastIteration->format('Y');
         $month = $lastIteration->format('m');
@@ -236,17 +236,23 @@ class WorkerCommand extends BaseCommand
         $min = $lastIteration->format('i');
         $sec = $lastIteration->format('s');
 
-        $sec = floor(($sec + $delay) / $delay) * $delay;
-        // $nextIteration is rounded to DateTime value, like this:
-        // if $delay = 60 /default value/ than it's rounded to begin of next minute,
-        // no matter it was only 1 or 59 seconds to the begin
-        $nextIteration = new DateTime(sprintf('%u-%u-%u %u:%u:%u', $year, $month, $day, $hour, $min, $sec));
+        // round seconds to multiple of step, like this:
+        // $step = 10 - round $sec to 10, 20, 30, 40, 50, 60
+        // $step = 15 - round $sec to 15, 30, 45, 60
+        // $step = 30 - round $sec to 30, 60
+        // $step = 60 /default value/ - round $sec to 60 /begin of next minute/
+        $roundSec = floor(($sec + $step) / $step) * $step;
+        $nextIteration = new DateTime(sprintf('%u-%u-%u %u:%u:%u', $year, $month, $day, $hour, $min, $roundSec));
 
-        while (new DateTime() < $nextIteration) {
-            sleep($sleep);
+        while (($now = new DateTime()) < $nextIteration) {
+            $diff = $nextIteration->format('U') - $now->format('U');
+            // use abs() because of negative $diff at daylight saving time in winter
+            $sleep = min(abs($diff), $sleep);
 
             $this->writeProcessesOutput();
             $this->finishOldProcesses();
+
+            sleep($sleep);
         }
 
         return $nextIteration;

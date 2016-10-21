@@ -30,7 +30,7 @@ class StpCrontabExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('stp_crontab.processes_limit', $config['processes_limit']);
-        $container->setParameter('stp_crontab.worker_delay', $config['worker_delay']);
         $container->setParameter('stp_crontab.worker_sleep', $config['worker_sleep']);
+        $container->setParameter('stp_crontab.worker_step', $config['worker_step']);
     }
 }

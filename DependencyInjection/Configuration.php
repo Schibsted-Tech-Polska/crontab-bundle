@@ -25,14 +25,14 @@ class Configuration implements ConfigurationInterface
             ->integerNode('processes_limit')
                 ->defaultValue(1)
             ->end()
-            // worker delay - SHOULDN'T be changed for anything other than default value /60/,
-            // because we try to mimics original 60 seconds crontab datetime granularity
-            ->integerNode('worker_delay')
-                ->defaultValue(60)
-            ->end()
             // worker sleep - lower value saves your CPU load, higher value gives you more frequent output from processes
             ->integerNode('worker_sleep')
                 ->defaultValue(5)
+            ->end()
+            // worker step - SHOULDN'T be changed for anything other than default value /60/,
+            // because we try to mimics original 60 seconds crontab's granularity
+            ->integerNode('worker_step')
+                ->defaultValue(60)
             ->end()
         ->end()
         ;
