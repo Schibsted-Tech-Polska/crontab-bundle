@@ -245,7 +245,7 @@ class WorkerCommand extends BaseCommand
         $nextIteration = new DateTime(sprintf('%u-%u-%u %u:%u:%u', $year, $month, $day, $hour, $min, $roundSec));
 
         while (($now = new DateTime()) < $nextIteration) {
-            $diff = $nextIteration->format('U') - $now->format('U');
+            $diff = $nextIteration->getTimestamp() - $now->getTimestamp();
             // use abs() because of negative $diff at daylight saving time in winter
             $sleep = min(abs($diff), $sleep);
 
