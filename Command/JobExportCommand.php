@@ -45,9 +45,9 @@ class JobExportCommand extends BaseCommand
             'Status',
             'Recently started at',
             'Recently ended at',
-            'Created at',
-            'Updated at',
-            'Comment',
+//            'Created at',
+//            'Updated at',
+//            'Comment',
         ];
         $rows = [];
 
@@ -87,11 +87,11 @@ class JobExportCommand extends BaseCommand
                         ->format($dateFormat) : '-'),
                     ($job->getEndedAt() !== null ? $job->getEndedAt()
                         ->format($dateFormat) : '-'),
-                    ($job->getCreatedAt() !== null ? $job->getCreatedAt()
-                        ->format($dateFormat) : '-'),
-                    ($job->getUpdatedAt() !== null ? $job->getUpdatedAt()
-                        ->format($dateFormat) : '-'),
-                    $job->getComment(),
+//                    ($job->getCreatedAt() !== null ? $job->getCreatedAt()
+//                        ->format($dateFormat) : '-'),
+//                    ($job->getUpdatedAt() !== null ? $job->getUpdatedAt()
+//                        ->format($dateFormat) : '-'),
+//                    $job->getComment(),
                 ];
             }
 
