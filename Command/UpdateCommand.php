@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command
  */
-class JobUpdateCommand extends BaseCommand
+class UpdateCommand extends BaseCommand
 {
     /** @var string */
     protected $id;
@@ -40,7 +40,7 @@ class JobUpdateCommand extends BaseCommand
     {
         parent::configure();
 
-        $this->setName('crontab:job:update')
+        $this->setName('crontab:update')
             ->setDescription('Crontab job update')
             ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Id (12 chars long)')
             ->addOption('expression', 'x', InputOption::VALUE_REQUIRED, 'Expression (in MM HH DD MM WW format)')

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command
  */
-class JobDeleteCommand extends BaseCommand
+class DeleteCommand extends BaseCommand
 {
     /** @var string */
     protected $id;
@@ -23,7 +23,7 @@ class JobDeleteCommand extends BaseCommand
     {
         parent::configure();
 
-        $this->setName('crontab:job:delete')
+        $this->setName('crontab:delete')
             ->setDescription('Crontab job delete')
             ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Id (12 chars long)')
         ;

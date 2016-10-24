@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command
  */
-class JobInsertCommand extends BaseCommand
+class InsertCommand extends BaseCommand
 {
     /** @var string */
     protected $expression;
@@ -37,7 +37,7 @@ class JobInsertCommand extends BaseCommand
     {
         parent::configure();
 
-        $this->setName('crontab:job:insert')
+        $this->setName('crontab:insert')
             ->setDescription('Crontab job insert')
             ->addOption('expression', 'x', InputOption::VALUE_REQUIRED, 'Expression (in MM HH DD MM WW format)',
                 '* * * * *')

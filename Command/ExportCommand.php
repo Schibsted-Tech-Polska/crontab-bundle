@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command
  */
-class JobExportCommand extends BaseCommand
+class ExportCommand extends BaseCommand
 {
     /** @var array */
     protected $columns;
@@ -23,7 +23,7 @@ class JobExportCommand extends BaseCommand
     {
         parent::configure();
 
-        $this->setName('crontab:job:export')
+        $this->setName('crontab:export')
             ->setDescription('Crontab job export')
             ->addOption('columns', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Columns (' . $this->getArrayAsString(self::COLUMNS) . ')', [
