@@ -8,7 +8,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Stp\\CrontabBundle\\": ""
+            "Stp\\CrontabBundle\\": "src/"
         }
     },
     "autoload-dev": {
@@ -28,5 +28,8 @@
         "symfony/process": "^2.8 || ^3.0",
 
         "cache/adapter-bundle": "^0.4"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^1.0"
     }
 }

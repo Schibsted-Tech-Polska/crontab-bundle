@@ -4,6 +4,7 @@ namespace Stp\CrontabBundle\Command;
 
 use Crontab\Manager\JobManagerInterface;
 use Crontab\Model\Job;
+use Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
