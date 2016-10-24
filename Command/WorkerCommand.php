@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-declare(ticks=1);
+declare(ticks = 1);
 
 /**
  * Command
@@ -85,7 +85,7 @@ class WorkerCommand extends BaseCommand
 
         $this->setName('crontab:worker')
             ->setDescription('Crontab worker')
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Type (' . $this->getTypesAsString() . ')',
+            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Type (' . $this->getArrayAsString(Job::TYPES) . ')',
                 Job::TYPE_SINGLE)
         ;
     }

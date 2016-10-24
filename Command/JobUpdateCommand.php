@@ -3,6 +3,7 @@
 namespace Stp\CrontabBundle\Command;
 
 use Crontab\Manager\JobManagerInterface;
+use Crontab\Model\Job;
 use DateTime;
 use Exception;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,7 +45,7 @@ class JobUpdateCommand extends BaseCommand
             ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Id (12 chars long)')
             ->addOption('expression', 'x', InputOption::VALUE_REQUIRED, 'Expression (in MM HH DD MM WW format)')
             ->addOption('command', 'c', InputOption::VALUE_REQUIRED, 'Command (accepted by bash)')
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Type (' . $this->getTypesAsString() . ')')
+            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Type (' . $this->getArrayAsString(Job::TYPES) . ')')
             ->addOption('active', 'a', InputOption::VALUE_REQUIRED, 'Active (no=not active, yes=active)')
             ->addOption('comment', 'o', InputOption::VALUE_REQUIRED, 'Comment (any text)')
         ;

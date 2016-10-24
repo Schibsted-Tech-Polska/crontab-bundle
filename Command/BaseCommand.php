@@ -19,6 +19,23 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
+    /** @const array */
+    const COLUMNS = [
+        'act' => 'Active',
+        'cmd' => 'Command',
+        'com' => 'Comment',
+        'cre' => 'Created at',
+        'dur' => 'Duration',
+        'end' => 'Recently ended at',
+        'exp' => 'Expression',
+        'id' => 'Id',
+        'nr' => '#',
+        'srt' => 'Recently started at',
+        'sta' => 'Status',
+        'typ' => 'Type',
+        'upd' => 'Updated at',
+    ];
+
     /** @var SymfonyStyle */
     protected $io;
 
@@ -36,35 +53,76 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Require field
+     * Get validated active
      *
-     * @param string $fieldName  field name
-     * @param mixed  $fieldValue field value
+     * @param bool $active active
      *
-     * @throws RuntimeException
+     * @return bool
      */
-    protected function requireField($fieldName, $fieldValue)
+    protected function getValidatedActive($active)
     {
-        if (empty($fieldValue)) {
-            throw new RuntimeException('The "' . $fieldName . '" option cannot be empty');
+        if ($active !== null) {
+            $active = boolval($active);
         }
+
+        return $active;
     }
 
     /**
-     * Get validated id
+     * Get validated columns
      *
-     * @param string $id id
+     * @param array $columns columns
+     *
+     * @return array
+     *
+     * @throws RuntimeException
+     */
+    protected function getValidatedColumns(array $columns = [])
+    {
+        if ($columns !== []) {
+            foreach ($columns as $column) {
+                if (!in_array($column, array_keys(self::COLUMNS))) {
+                    throw new RuntimeException('The "columns" option can have only any of those values: ' .
+                        implode(', ', array_keys(self::COLUMNS)));
+                }
+            }
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Get validated command
+     *
+     * @param string $command command
      *
      * @return string
      */
-    protected function getValidatedId($id)
+    protected function getValidatedCommand($command)
     {
-        if ($id !== null) {
-            $id = strval($id);
+        if ($command !== null) {
+            $command = strval($command);
         }
 
-        return $id;
+        return $command;
     }
+
+    /**
+     * Get validated comment
+     *
+     * @param string $comment comment
+     *
+     * @return string
+     */
+    protected function getValidatedComment($comment)
+    {
+        if ($comment !== null) {
+            $comment = strval($comment);
+        }
+
+        return $comment;
+    }
+
 
     /**
      * Get validated expression
@@ -85,19 +143,19 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Get validated command
+     * Get validated id
      *
-     * @param string $command command
+     * @param string $id id
      *
      * @return string
      */
-    protected function getValidatedCommand($command)
+    protected function getValidatedId($id)
     {
-        if ($command !== null) {
-            $command = strval($command);
+        if ($id !== null) {
+            $id = strval($id);
         }
 
-        return $command;
+        return $id;
     }
 
     /**
@@ -122,50 +180,35 @@ abstract class BaseCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Get validated active
+     * Require field
      *
-     * @param bool $active active
+     * @param string $fieldName  field name
+     * @param mixed  $fieldValue field value
      *
-     * @return bool
+     * @throws RuntimeException
      */
-    protected function getValidatedActive($active)
+    protected function requireField($fieldName, $fieldValue)
     {
-        if ($active !== null) {
-            $active = boolval($active);
+        if (empty($fieldValue)) {
+            throw new RuntimeException('The "' . $fieldName . '" option cannot be empty');
         }
-
-        return $active;
     }
 
     /**
-     * Get validated comment
+     * Get array as string
      *
-     * @param string $comment comment
-     *
-     * @return string
-     */
-    protected function getValidatedComment($comment)
-    {
-        if ($comment !== null) {
-            $comment = strval($comment);
-        }
-
-        return $comment;
-    }
-
-    /**
-     * Get types as string
+     * @param array $items items
      *
      * @return string
      */
-    protected function getTypesAsString()
+    protected function getArrayAsString(array $items)
     {
-        $types = [];
+        $array = [];
 
-        foreach (Job::TYPES as $key => $value) {
-            $types[] = $key . '=' . $value;
+        foreach ($items as $key => $value) {
+            $array[] = $key . '=' . $value;
         }
-        $string = implode(', ', $types);
+        $string = implode(', ', $array);
 
         return $string;
     }

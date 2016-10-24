@@ -42,7 +42,7 @@ class JobInsertCommand extends BaseCommand
             ->addOption('expression', 'x', InputOption::VALUE_REQUIRED, 'Expression (in MM HH DD MM WW format)',
                 '* * * * *')
             ->addOption('command', 'c', InputOption::VALUE_REQUIRED, 'Command (accepted by bash)')
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Type (' . $this->getTypesAsString() . ')',
+            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Type (' . $this->getArrayAsString(Job::TYPES) . ')',
                 Job::TYPE_SINGLE)
             ->addOption('active', 'a', InputOption::VALUE_REQUIRED, 'Active (no=not active, yes=active)', 'yes')
             ->addOption('comment', 'o', InputOption::VALUE_REQUIRED, 'Comment (any text)', ' ')
