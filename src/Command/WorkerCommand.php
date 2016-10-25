@@ -157,8 +157,10 @@ class WorkerCommand extends BaseCommand
                 $process = new Process($command);
                 $process->start();
 
-                $job->setStartedAt(new DateTime());
-                $jobManager->setJob($job->getId(), $job);
+                if ($job->getStatus() != Job::STATUS_IN_PROGRESS) {
+                    $job->setStartedAt(new DateTime());
+                    $jobManager->setJob($job->getId(), $job);
+                }
 
                 $processId = $process->getPid();
                 $array = [
