@@ -134,7 +134,7 @@ class WorkerCommand extends BaseCommand
         }
 
         if ($res) {
-            $this->io->success('Congratulation! Worker should never stop, but it happened!');
+            $this->io->success('Congratulation! Worker should never stop, but it happened ;)');
         } else {
             $this->io->error('An error occurred during working as a worker');
         }
@@ -154,8 +154,13 @@ class WorkerCommand extends BaseCommand
         foreach ($jobs as $job) {
             $command = $this->getExecutableCommand($job->getCommand());
             if ($this->canRunCommand($command)) {
-                $process = new Process($command);
-                $process->start();
+                try {
+                    $process = new Process($command);
+                    $process->start();
+                } catch (Exception $e) {
+                    $this->io->error('An error occurred during starting "' . $command . '" command. ' .
+                        $e->getMessage());
+                }
 
                 if ($job->getStatus() != Job::STATUS_IN_PROGRESS) {
                     $job->setStartedAt(new DateTime());
