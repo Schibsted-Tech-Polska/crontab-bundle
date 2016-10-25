@@ -54,6 +54,8 @@ class DeleteCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $msg = '';
+
         try {
             /** @var JobManagerInterface $jobManager */
             $jobManager = $this->container->get('stp_crontab.manager.job');
@@ -61,12 +63,13 @@ class DeleteCommand extends BaseCommand
             $res = $jobManager->removeJob($this->id);
         } catch (Exception $e) {
             $res = 0;
+            $msg = ' ' . $e->getMessage();
         }
 
         if ($res) {
-            $this->io->success('Job was deleted');
+            $this->io->success('Job was deleted.');
         } else {
-            $this->io->error('An error occurred during deleting job');
+            $this->io->error('An error occurred during deleting job.' . $msg);
         }
 
         return intval(!$res);

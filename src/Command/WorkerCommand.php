@@ -116,6 +116,7 @@ class WorkerCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $lastIteration = new DateTime();
+        $msg = '';
 
         try {
             $this->registerShutdownHandlers();
@@ -131,12 +132,13 @@ class WorkerCommand extends BaseCommand
             $res = 1;
         } catch (Exception $e) {
             $res = 0;
+            $msg = ' ' . $e->getMessage();
         }
 
         if ($res) {
             $this->io->success('Congratulation! Worker should never stop, but it happened ;)');
         } else {
-            $this->io->error('An error occurred during working as a worker');
+            $this->io->error('An error occurred during working as a worker.' . $msg);
         }
 
         return intval(!$res);
@@ -157,22 +159,22 @@ class WorkerCommand extends BaseCommand
                 try {
                     $process = new Process($command);
                     $process->start();
+
+                    if ($job->getStatus() != Job::STATUS_IN_PROGRESS) {
+                        $job->setStartedAt(new DateTime());
+                        $jobManager->setJob($job->getId(), $job);
+                    }
+
+                    $processId = $process->getPid();
+                    $array = [
+                        $this->processKey => $process,
+                        $this->jobKey => $job,
+                    ];
+                    $this->processes[$processId] = $array;
                 } catch (Exception $e) {
                     $this->io->error('An error occurred during starting "' . $command . '" command. ' .
                         $e->getMessage());
                 }
-
-                if ($job->getStatus() != Job::STATUS_IN_PROGRESS) {
-                    $job->setStartedAt(new DateTime());
-                    $jobManager->setJob($job->getId(), $job);
-                }
-
-                $processId = $process->getPid();
-                $array = [
-                    $this->processKey => $process,
-                    $this->jobKey => $job,
-                ];
-                $this->processes[$processId] = $array;
             }
         }
     }

@@ -67,6 +67,7 @@ class ListCommand extends BaseCommand
     {
         $headers = [];
         $rows = [];
+        $msg = '';
 
         try {
             /** @var JobManagerInterface $jobManager */
@@ -88,12 +89,13 @@ class ListCommand extends BaseCommand
             $res = 1;
         } catch (Exception $e) {
             $res = 0;
+            $msg = ' ' . $e->getMessage();
         }
 
         if ($res) {
             $this->io->table($headers, $rows);
         } else {
-            $this->io->error('An error occurred during listing jobs');
+            $this->io->error('An error occurred during listing jobs.' . $msg);
         }
 
         return intval(!$res);

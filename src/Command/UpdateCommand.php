@@ -81,8 +81,9 @@ class UpdateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $updated = false;
         $now = new DateTime();
+        $updated = false;
+        $msg = '';
 
         try {
             /** @var JobManagerInterface $jobManager */
@@ -119,16 +120,17 @@ class UpdateCommand extends BaseCommand
             }
         } catch (Exception $e) {
             $res = 0;
+            $msg = ' ' . $e->getMessage();
         }
 
         if ($res) {
             if ($updated) {
-                $this->io->success('Job was updated');
+                $this->io->success('Job was updated.');
             } else {
-                $this->io->note('Job wasn\'t updated');
+                $this->io->note('Job wasn\'t updated.');
             }
         } else {
-            $this->io->error('An error occurred during updating job');
+            $this->io->error('An error occurred during updating job.' . $msg);
         }
 
         return intval(!$res);
