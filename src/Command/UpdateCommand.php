@@ -81,7 +81,6 @@ class UpdateCommand extends BaseCommand
     {
         $now = new DateTime();
         $updated = false;
-        $msg = '';
 
         try {
             /** @var JobManagerInterface $jobManager */
@@ -114,23 +113,20 @@ class UpdateCommand extends BaseCommand
 
                 $res = $jobManager->setJob($this->id, $job);
             } else {
-                $res = 1;
+                $res = false;
             }
         } catch (Exception $e) {
-            $res = 0;
-            $msg = ' ' . $e->getMessage();
+            $this->io->error('An error occurred during updating job. ' . $e->getMessage());
+
+            return 1;
         }
 
         if ($res) {
-            if ($updated) {
-                $this->io->success('Job was updated.');
-            } else {
-                $this->io->note('Job wasn\'t updated.');
-            }
+            $this->io->success('Job was updated.');
         } else {
-            $this->io->error('An error occurred during updating job.' . $msg);
+            $this->io->note('Job wasn\'t updated.');
         }
 
-        return intval(!$res);
+        return 0;
     }
 }

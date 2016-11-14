@@ -114,7 +114,6 @@ class WorkerCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $lastIteration = new DateTime();
-        $msg = '';
 
         try {
             $this->registerShutdownHandlers();
@@ -126,20 +125,15 @@ class WorkerCommand extends BaseCommand
                 $this->writeProcessesOutput();
                 $this->finishOldProcesses();
             }
-
-            $res = 1;
         } catch (Exception $e) {
-            $res = 0;
-            $msg = ' ' . $e->getMessage();
+            $this->io->error('An error occurred during working as a worker. ' . $e->getMessage());
+
+            return 1;
         }
 
-        if ($res) {
-            $this->io->success('Congratulation! Worker should never stop, but it happened ;)');
-        } else {
-            $this->io->error('An error occurred during working as a worker.' . $msg);
-        }
+        $this->io->note('Congratulation! Worker should never stop, but it happened ;)');
 
-        return intval(!$res);
+        return 0;
     }
 
     /**
@@ -151,6 +145,7 @@ class WorkerCommand extends BaseCommand
         $jobManager = $this->container->get('stp_crontab.manager.job');
 
         $jobs = $jobManager->getDueJobs($this->type);
+        /** @var Job $job */
         foreach ($jobs as $job) {
             $command = $this->getExecutableCommand($job->getCommand());
             if ($this->canRunCommand($command)) {

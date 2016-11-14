@@ -77,7 +77,6 @@ class InsertCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $now = new DateTime();
-        $msg = '';
 
         try {
             /** @var JobManagerInterface $jobManager */
@@ -95,16 +94,17 @@ class InsertCommand extends BaseCommand
 
             $res = $jobManager->addJob($job);
         } catch (Exception $e) {
-            $res = 0;
-            $msg = ' ' . $e->getMessage();
+            $this->io->error('An error occurred during adding job. ' . $e->getMessage());
+
+            return 1;
         }
 
         if ($res) {
             $this->io->success('Job was added.');
         } else {
-            $this->io->error('An error occurred during adding job.' . $msg);
+            $this->io->note('Job wasn\'t added.');
         }
 
-        return intval(!$res);
+        return 0;
     }
 }
