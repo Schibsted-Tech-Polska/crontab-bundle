@@ -38,8 +38,6 @@ class UpdateCommand extends BaseCommand
      */
     protected function configure()
     {
-        parent::configure();
-
         $this->setName('crontab:update')
             ->setDescription('Crontab job update')
             ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Id (12 chars long)')

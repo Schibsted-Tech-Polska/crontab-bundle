@@ -21,8 +21,6 @@ class DeleteCommand extends BaseCommand
      */
     protected function configure()
     {
-        parent::configure();
-
         $this->setName('crontab:delete')
             ->setDescription('Crontab job delete')
             ->addOption('id', 'i', InputOption::VALUE_REQUIRED, 'Id (12 chars long)')

@@ -81,8 +81,6 @@ class WorkerCommand extends BaseCommand
      */
     protected function configure()
     {
-        parent::configure();
-
         $this->setName('crontab:worker')
             ->setDescription('Crontab worker')
             ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'Type (' . $this->getArrayAsString(Job::TYPES) . ')',

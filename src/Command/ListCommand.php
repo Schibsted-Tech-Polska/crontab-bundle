@@ -22,8 +22,6 @@ class ListCommand extends BaseCommand
      */
     protected function configure()
     {
-        parent::configure();
-
         $this->setName('crontab:list')
             ->setDescription('Crontab job list')
             ->addOption('columns', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,

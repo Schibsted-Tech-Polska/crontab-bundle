@@ -35,8 +35,6 @@ class InsertCommand extends BaseCommand
      */
     protected function configure()
     {
-        parent::configure();
-
         $this->setName('crontab:insert')
             ->setDescription('Crontab job insert')
             ->addOption('expression', 'x', InputOption::VALUE_REQUIRED, 'Expression (in MM HH DD MM WW format)',
