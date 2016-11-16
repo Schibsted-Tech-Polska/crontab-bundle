@@ -5,6 +5,7 @@ namespace Stp\CrontabBundle\Command;
 use Crontab\Manager\JobManagerInterface;
 use Crontab\Model\Job;
 use Exception;
+use Stp\CrontabBundle\Command\Validator\ColumnsTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ListCommand extends BaseCommand
 {
+    use ColumnsTrait;
+
     /** @var array */
     protected $columns;
 
@@ -25,7 +28,7 @@ class ListCommand extends BaseCommand
         $this->setName('crontab:list')
             ->setDescription('Crontab job list')
             ->addOption('columns', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                'Columns (' . $this->getArrayAsString(self::COLUMNS) . ')', [
+                'Columns (' . $this->getArrayAsString(self::$columnTypes) . ')', [
                     'nr',
                     'id',
                     'exp',
@@ -71,7 +74,7 @@ class ListCommand extends BaseCommand
             $jobManager = $this->container->get('stp_crontab.manager.job');
 
             foreach ($this->columns as $column) {
-                $headers[] = self::COLUMNS[$column];
+                $headers[] = self::$columnTypes[$column];
             }
 
             $jobs = $jobManager->getJobs();

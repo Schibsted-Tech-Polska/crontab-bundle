@@ -21,6 +21,10 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('stp_crontab');
 
         $rootNode->children()
+            // logger's name
+            ->scalarNode('logger_name')
+                ->defaultValue('monolog.logger.command')
+            ->end()
             // limit of processes with the same command line /the same type/
             ->integerNode('processes_limit')
                 ->defaultValue(1)

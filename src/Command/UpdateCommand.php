@@ -6,6 +6,12 @@ use Crontab\Manager\JobManagerInterface;
 use Crontab\Model\Job;
 use DateTime;
 use Exception;
+use Stp\CrontabBundle\Command\Validator\ActiveTrait;
+use Stp\CrontabBundle\Command\Validator\CommandTrait;
+use Stp\CrontabBundle\Command\Validator\CommentTrait;
+use Stp\CrontabBundle\Command\Validator\ExpressionTrait;
+use Stp\CrontabBundle\Command\Validator\IdTrait;
+use Stp\CrontabBundle\Command\Validator\TypeTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,6 +21,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class UpdateCommand extends BaseCommand
 {
+    use ActiveTrait;
+    use CommandTrait;
+    use CommentTrait;
+    use ExpressionTrait;
+    use IdTrait;
+    use TypeTrait;
+
     /** @var string */
     protected $id;
 

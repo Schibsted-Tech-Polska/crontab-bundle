@@ -6,18 +6,21 @@ use Crontab\Manager\JobManagerInterface;
 use Crontab\Model\Job;
 use DateTime;
 use Exception;
+use Stp\CrontabBundle\Command\Validator\TypeTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-declare(ticks = 1);
+declare(ticks=1);
 
 /**
  * Command
  */
 class WorkerCommand extends BaseCommand
 {
+    use TypeTrait;
+
     /** @var string */
     protected $processKey = 'process';
 
@@ -126,14 +129,18 @@ class WorkerCommand extends BaseCommand
                 $this->finishOldProcesses();
             }
         } catch (Exception $e) {
-            $this->io->error('An error occurred during working as a worker. ' . $e->getMessage());
+            $this->logger->error('An error occurred during working as a worker. ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'exception' => get_class($e),
+            ]);
 
             return 1;
         }
 
-        $this->io->note('Congratulation! Worker should never stop, but it happened ;)');
+        $this->logger->critical('Congratulation! Worker should never stop, but it happened ;)');
 
-        return 0;
+        return 1;
     }
 
     /**
@@ -165,8 +172,12 @@ class WorkerCommand extends BaseCommand
                     ];
                     $this->processes[$processId] = $array;
                 } catch (Exception $e) {
-                    $this->io->error('An error occurred during starting "' . $command . '" command. ' .
-                        $e->getMessage());
+                    $this->logger->warning('An error occurred during starting "' . $command . '" command. ' .
+                        $e->getMessage(), [
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'exception' => get_class($e),
+                    ]);
                 }
             }
         }
@@ -269,7 +280,7 @@ class WorkerCommand extends BaseCommand
             /** @var Process $process */
             $process = $array[$this->processKey];
 
-            $this->io->write($process->getOutput());
+            $this->logger->info($process->getOutput());
         }
     }
 

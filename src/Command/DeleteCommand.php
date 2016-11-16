@@ -4,6 +4,7 @@ namespace Stp\CrontabBundle\Command;
 
 use Crontab\Manager\JobManagerInterface;
 use Exception;
+use Stp\CrontabBundle\Command\Validator\IdTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,6 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DeleteCommand extends BaseCommand
 {
+    use IdTrait;
+
     /** @var string */
     protected $id;
 
